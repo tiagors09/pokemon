@@ -1,16 +1,30 @@
-let pokemonId = 1;
-
 const app = document.getElementById('app');
+const MAX_POKEMONS = 151;
 
-const title = document.createElement('h1');
-title.innerText = 'gotta catch em all';
+async function fetchPokemons() {
+  try {
+    let response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${MAX_POKEMONS}`);
+    let data = await response.json();
 
-//body
-//.appendChild(title);
+    return data['results'];
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-app.addEventListener(
-  'click',
-  (el, e) => {
+async function getDataForEachPokemon(pokemonID) {
+  try {
+    let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonID}`);
+    let pokemon = await response.json();
+
+    return pokemon;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+fetchPokemons().then((pokemons) => {
+  pokemons.map((_, id) => getDataForEachPokemon(id + 1).then((pokemonData) => {
     const pokemon = document
       .createElement('figure');
     pokemon
@@ -21,11 +35,11 @@ app.addEventListener(
     pokemonImg
       .setAttribute(
         'src',
-        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`
+        pokemonData.sprites.front_default
       );
     const pokemonCaption = document
       .createElement('figcaption');
-    pokemonCaption.innerText = `#${pokemonId}`;
+    pokemonCaption.innerText = pokemonData.name;
 
     pokemon
       .appendChild(pokemonImg);
@@ -34,7 +48,7 @@ app.addEventListener(
 
     app
       .appendChild(pokemon);
+  }));
+});
 
-    pokemonId++;
-  }
-);
+

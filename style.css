@@ -6,6 +6,14 @@ body {
   padding: 0;
 }
 
+h1 {
+  background-color: rgb(172, 51, 51);
+  color: rgb(242, 244, 247);
+  font-size: xx-large;
+  padding: 20px;
+  margin: 0;
+}
+
 #app {
   width: 100vw;
   height: 100vh;
